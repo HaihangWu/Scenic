@@ -31,9 +31,15 @@
 #SBATCH --mail-user=robotic.engineer.dylan.wu@gmail.com
 #SBATCH --mail-type=BEGIN,FAIL,END
 
-module load anaconda3/2021.11
-eval "$(conda shell.bash hook)"
-conda activate scenic
+#module load anaconda3/2021.11
+#eval "$(conda shell.bash hook)"
+#conda activate scenic
+
+source /usr/local/module/spartan_new.sh
+module load fosscuda/2019b
+module load gcc/8.3.0 cuda/10.1.243 openmpi/3.1.4
+module load python/3.7.4
+module load tensorflow/2.3.1-python-3.7.4
 
 # The job command(s):
 export MASTER_PORT=$(expr 20000 + $(echo -n $SLURM_JOBID | tail -c 4))
