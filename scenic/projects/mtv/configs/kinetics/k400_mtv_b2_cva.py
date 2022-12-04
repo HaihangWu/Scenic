@@ -115,9 +115,9 @@ def get_config():
   # https://github.com/google-research/scenic/tree/main/scenic/projects/baselines (checkpoint_format = 'scenic')  pylint: disable=line-too-long
   # https://github.com/google-research/vision_transformer (checkpoint_format = 'big_vision')  pylint: disable=line-too-long
   config.init_from.checkpoint_path = [
-      '/data/gpfs/projects/punim0512/Haihangw-Projects/video_train/Scenic/mtv_b_k400',
-      '/data/gpfs/projects/punim0512/Haihangw-Projects/video_train/Scenic/mtv_b_k400',
-      '/data/gpfs/projects/punim0512/Haihangw-Projects/video_train/Scenic/mtv_b_k400',
+      '/data/gpfs/projects/punim0512/Haihangw-Projects/video_train/Scenic',
+      '/data/gpfs/projects/punim0512/Haihangw-Projects/video_train/Scenic',
+      '/data/gpfs/projects/punim0512/Haihangw-Projects/video_train/Scenic',
   ]
   config.init_from.checkpoint_formats = [
       'scenic',
