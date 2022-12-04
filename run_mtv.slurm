@@ -52,6 +52,6 @@ echo "MASTER_PORT="$MASTER_PORT
 echo "MASTER_ADDR="$MASTER_ADDR
 echo "r$SLURM_NODEID Launching python script"
 
-srun python scenic/main.py -- \
-  --config=scenic/projects/baselines/configs/imagenet/imagenet_vit_config.py \
-  --workdir=./ >> mtv.txt
+srun python -m scenic.projects.mtv.main \
+  --config=scenic/projects/mtv/configs/kinetics/k400_mtv_b2_cva.py \
+  --workdir=mtv_base_cva/ >> mtv.txt
