@@ -21,7 +21,7 @@ def get_config():
   config.dataset_name = 'video_tfrecord_dataset'
   config.dataset_configs = ml_collections.ConfigDict()
   config.dataset_configs.base_dir = (
-      '/path/to/dataset')
+      '/data/gpfs/projects/punim0512/data/kinetics-dataset/k400')
   config.dataset_configs.tables = {
       'train': 'train.tfrecord@1024',
       'validation': 'validation.tfrecord@1024',
@@ -115,14 +115,14 @@ def get_config():
   # https://github.com/google-research/scenic/tree/main/scenic/projects/baselines (checkpoint_format = 'scenic')  pylint: disable=line-too-long
   # https://github.com/google-research/vision_transformer (checkpoint_format = 'big_vision')  pylint: disable=line-too-long
   config.init_from.checkpoint_path = [
-      '/path/to/vit-tiny',
-      '/path/to/vit-small',
-      '/path/to/vit-base',
+      '/data/gpfs/projects/punim0512/Haihangw-Projects/video_train/Scenic/mtv_b_k400',
+      '/data/gpfs/projects/punim0512/Haihangw-Projects/video_train/Scenic/mtv_b_k400',
+      '/data/gpfs/projects/punim0512/Haihangw-Projects/video_train/Scenic/mtv_b_k400',
   ]
   config.init_from.checkpoint_formats = [
-      'big_vision',
-      'big_vision',
-      'big_vision',
+      'scenic',
+      'scenic',
+      'scenic',
   ]
   config.init_from.restore_positional_embedding = True
   config.init_from.restore_input_embedding = True
