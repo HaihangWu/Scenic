@@ -31,15 +31,15 @@
 #SBATCH --mail-user=robotic.engineer.dylan.wu@gmail.com
 #SBATCH --mail-type=BEGIN,FAIL,END
 
-#module load anaconda3/2021.11
-#eval "$(conda shell.bash hook)"
-#conda activate scenic
+module load anaconda3/2021.11
+eval "$(conda shell.bash hook)"
+conda activate scenic
 
-source /usr/local/module/spartan_new.sh
-module load fosscuda/2019b
-module load gcc/8.3.0 cuda/10.1.243 openmpi/3.1.4
-module load python/3.7.4
-module load tensorflow/2.3.1-python-3.7.4
+#source /usr/local/module/spartan_new.sh
+#module load fosscuda/2019b
+#module load gcc/8.3.0 cuda/10.1.243 openmpi/3.1.4
+#module load python/3.7.4
+#module load tensorflow/2.3.1-python-3.7.4
 
 # The job command(s):
 export MASTER_PORT=$(expr 20000 + $(echo -n $SLURM_JOBID | tail -c 4))
@@ -52,6 +52,6 @@ echo "MASTER_PORT="$MASTER_PORT
 echo "MASTER_ADDR="$MASTER_ADDR
 echo "r$SLURM_NODEID Launching python script"
 
-srun python -m scenic.projects.mtv.main \
-  --config=scenic/projects/mtv/configs/kinetics/k400_mtv_b2_cva.py \
-  --workdir=mtv_base_cva/ >> mtv.txt
+srun python scenic/main.py -- \
+  --config=scenic/projects/baselines/configs/imagenet/imagenet_vit_config.py \
+  --workdir=./ >> mtv.txt
