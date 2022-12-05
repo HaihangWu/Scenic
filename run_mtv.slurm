@@ -6,13 +6,13 @@
 #SBATCH --job-name="example.py"
 
 # Partition for the job:
-#SBATCH -p gpu-a100
+# -p gpu-a100
 
-# --partition deeplearn
-# --qos gpgpudeeplearn
+#SBATCH --partition deeplearn
+#SBATCH --qos gpgpudeeplearn
 
 # Request different amount of resources for different nodes
-# --constraint=[dlg1|dlg2|dlg3|dlg4]
+#SBATCH --constraint=[dlg1|dlg2|dlg3|dlg4]
 # --constraint=dlg4
 #SBATCH --nodes=1                # node count
 #SBATCH --ntasks-per-node=1      # total number of tasks per node
