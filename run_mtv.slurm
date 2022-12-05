@@ -34,7 +34,7 @@
 module load anaconda3/2021.11
 eval "$(conda shell.bash hook)"
 conda deactivate
-conda activate mtv
+conda activate Scenic
 
 
 #source /usr/local/module/spartan_new.sh
