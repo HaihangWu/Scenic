@@ -54,9 +54,9 @@ echo "MASTER_PORT="$MASTER_PORT
 echo "MASTER_ADDR="$MASTER_ADDR
 echo "r$SLURM_NODEID Launching python script"
 
-#srun python -m scenic.projects.mtv.main \
-#  --config=scenic/projects/mtv/configs/kinetics/k400_mtv_b2_cva.py \
-#  --workdir=mtv_base_cva/ >> mtv.txt
+srun python -m scenic.projects.mtv.main \
+  --config=scenic/projects/mtv/configs/kinetics/k400_mtv_b2_cva.py \
+  --workdir=mtv_base_cva/ >> mtv.txt
 
 
-srun python test.py --batch-size 1024 --train-steps 200000 --device gpu >> test.txt
+#srun python test.py --batch-size 1024 --train-steps 200000 --device gpu >> test.txt
