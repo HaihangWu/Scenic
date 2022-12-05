@@ -36,6 +36,8 @@ eval "$(conda shell.bash hook)"
 conda deactivate
 conda activate mtv
 
+conda list
+
 #source /usr/local/module/spartan_new.sh
 #module load fosscuda/2019b
 #module load gcc/8.3.0 cuda/10.1.243 openmpi/3.1.4
