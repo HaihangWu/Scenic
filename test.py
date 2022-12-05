@@ -1,64 +1,100 @@
+import os
+import argparse
 
-from __future__ import print_function
-'''
-Basic Multi GPU computation example using TensorFlow library.
-Author: Aymeric Damien
-Project: https://github.com/aymericdamien/TensorFlow-Examples/
-'''
-
-'''
-This tutorial requires your machine to have 1 GPU
-"/cpu:0": The CPU of your machine.
-"/gpu:0": The first GPU of your machine
-'''
-
-import numpy as np
 import tensorflow as tf
-import datetime
+import pandas as pd
 
-# Processing Units logs
-log_device_placement = True
+tf.get_logger().setLevel('INFO')
 
-# Num of multiplications to perform
-n = 10
 
-'''
-Example: compute A^n + B^n on 2 GPUs
-Results on 8 cores with 2 GTX-980:
- * Single GPU computation time: 0:00:11.277449
- * Multi GPU computation time: 0:00:07.131701
-'''
-# Create random large matrix
-A = np.random.rand(10000, 10000).astype('float32')
-B = np.random.rand(10000, 10000).astype('float32')
+def get_args():
+    """Get required args"""
+    args_parser = argparse.ArgumentParser()
+    # Experiment arguments
+    args_parser.add_argument(
+        '--batch-size',
+        required=False,
+        default=256,
+        type=int
+    )
+    args_parser.add_argument(
+        '--train-steps',
+        required=False,
+        default=5000,
+        type=int
+    )
+    args_parser.add_argument(
+        '--device',
+        required=True,
+        type=str
+    )
+    return args_parser.parse_args()
 
-# Create a graph to store results
-c1 = []
-c2 = []
 
-def matpow(M, n):
-    if n < 1: #Abstract cases where n < 1
-        return M
-    else:
-        return tf.matmul(M, matpow(M, n-1))
+args = get_args()
 
-'''
-Single GPU computing
-'''
-with tf.device('/gpu:0'):
-    a = tf.placeholder(tf.float32, [10000, 10000])
-    b = tf.placeholder(tf.float32, [10000, 10000])
-    # Compute A^n and B^n and store results in c1
-    c1.append(matpow(a, n))
-    c1.append(matpow(b, n))
+BATCH_SIZE = args.batch_size
+TRAIN_STEPS = args.train_steps
+DEVICE = args.device.lower()
 
-with tf.device('/cpu:0'):
-  sum = tf.add_n(c1) #Addition of all elements in c1, i.e. A^n + B^n
+assert DEVICE in ['cpu', 'gpu'], "--device must is in ['cpu', 'gpu']"
 
-t1_1 = datetime.datetime.now()
-with tf.Session(config=tf.ConfigProto(log_device_placement=log_device_placement)) as sess:
-    # Run the op.
-    sess.run(sum, {a:A, b:B})
-t2_1 = datetime.datetime.now()
+# Select device
+if DEVICE == 'cpu':
+    os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
-print("Single GPU computation time: " + str(t2_1-t1_1))
+# TEST CODE ------
+
+CSV_COLUMN_NAMES = ['SepalLength', 'SepalWidth', 'PetalLength', 'PetalWidth', 'Species']
+SPECIES = ['Setosa', 'Versicolor', 'Virginica']
+
+print('-' * 30)
+print("Loading Data ...")
+
+train_path = tf.keras.utils.get_file(
+    "iris_training.csv", "https://storage.googleapis.com/download.tensorflow.org/data/iris_training.csv")
+test_path = tf.keras.utils.get_file(
+    "iris_test.csv", "https://storage.googleapis.com/download.tensorflow.org/data/iris_test.csv")
+
+train = pd.read_csv(train_path, names=CSV_COLUMN_NAMES, header=0)
+test = pd.read_csv(test_path, names=CSV_COLUMN_NAMES, header=0)
+
+train_y = train.pop('Species')
+test_y = test.pop('Species')
+
+
+def input_fn(features, labels, training=True, batch_size=256):
+    """An input function for training or evaluating"""
+    # Convert the inputs to a Dataset.
+    dataset = tf.data.Dataset.from_tensor_slices((dict(features), labels))
+
+    # Shuffle and repeat if you are in training mode.
+    if training:
+        dataset = dataset.shuffle(1000).repeat()
+
+    return dataset.batch(batch_size)
+
+
+# Feature columns describe how to use the input.
+my_feature_columns = []
+for key in train.keys():
+    my_feature_columns.append(tf.feature_column.numeric_column(key=key))
+
+print('-' * 30)
+print("Building Model ...")
+
+# Build a DNN with 2 hidden layers with 30 and 10 hidden nodes each.
+classifier = tf.estimator.DNNClassifier(
+    feature_columns=my_feature_columns,
+    # Two hidden layers of 30 and 10 nodes respectively.
+    hidden_units=[30, 10],
+    # The model must choose between 3 classes.
+    n_classes=3)
+
+print('-' * 100)
+print("Training Model on", DEVICE, "...")
+
+# Train the Model.
+classifier.train(
+    input_fn=lambda: input_fn(train, train_y, training=True, batch_size=BATCH_SIZE),
+    steps=TRAIN_STEPS)

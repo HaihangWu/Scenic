@@ -36,7 +36,6 @@ eval "$(conda shell.bash hook)"
 conda deactivate
 conda activate mtv-1
 
-conda list
 
 #source /usr/local/module/spartan_new.sh
 #module load fosscuda/2019b
@@ -59,4 +58,4 @@ echo "r$SLURM_NODEID Launching python script"
 #  --config=scenic/projects/mtv/configs/kinetics/k400_mtv_b2_cva.py \
 #  --workdir=mtv_base_cva/ >> mtv.txt
 
-srun python test.py >> test.txt
+srun python run.py --batch-size 256 --train-steps 5000 --device gpu >> test.txt
