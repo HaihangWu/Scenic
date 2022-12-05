@@ -45,6 +45,10 @@ if DEVICE == 'cpu':
 
 # TEST CODE ------
 
+print("wuhh1", tf.__version__)
+print("# GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
+nvcc --version
+
 CSV_COLUMN_NAMES = ['SepalLength', 'SepalWidth', 'PetalLength', 'PetalWidth', 'Species']
 SPECIES = ['Setosa', 'Versicolor', 'Virginica']
 

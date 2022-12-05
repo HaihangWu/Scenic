@@ -58,4 +58,6 @@ echo "r$SLURM_NODEID Launching python script"
 #  --config=scenic/projects/mtv/configs/kinetics/k400_mtv_b2_cva.py \
 #  --workdir=mtv_base_cva/ >> mtv.txt
 
+nvcc --version
+
 srun python test.py --batch-size 1024 --train-steps 200000 --device gpu >> test.txt
