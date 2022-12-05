@@ -25,7 +25,7 @@
 # --gpus-per-task=1  # number of gpus per task
 
 # The maximum running time of the job in days-hours:mins:sec
-#SBATCH --time=03-00:00:0
+#SBATCH --time=00-01:00:0
 
 # Send yourself an email when the job:
 #SBATCH --mail-user=robotic.engineer.dylan.wu@gmail.com
